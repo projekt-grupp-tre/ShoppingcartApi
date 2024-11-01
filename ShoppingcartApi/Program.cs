@@ -1,4 +1,7 @@
 
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 namespace ShoppingcartApi
 {
 	public class Program
@@ -10,6 +13,8 @@ namespace ShoppingcartApi
 			// Add services to the container.
 
 			builder.Services.AddControllers();
+			builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\r\\Documents\\test.mdf;Integrated Security=True;Connect Timeout=30"));
+			
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
