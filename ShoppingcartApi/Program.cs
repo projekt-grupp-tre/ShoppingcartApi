@@ -1,6 +1,7 @@
 using Infrastructure.Contexts;
 using Infrastructure.Interfaces;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ShoppingcartApi
@@ -12,11 +13,13 @@ namespace ShoppingcartApi
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-
 			builder.Services.AddControllers();
-			
 			builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
-            //builder.Services.AddScoped<IProductToCartItemFactory>();
+			builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+			builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+			builder.Services.AddScoped<ICartItemService, CartItemService>();
+
+
             var connectionString = builder.Configuration["Connectionstrings:Database"];
             builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 

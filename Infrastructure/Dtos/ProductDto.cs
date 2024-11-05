@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Interfaces;
-using System.Data.SqlTypes;
 
-namespace ShoppingcartApi.Dtos
+namespace Infrastructure.Dtos
 {
 	public class ProductDto : IProductDto
 	{

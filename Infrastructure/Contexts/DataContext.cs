@@ -11,16 +11,7 @@ namespace Infrastructure.Contexts
 
 		}
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
 
-			//modelBuilder.Entity<ShoppingCartEntity>()
-			//.HasMany(c => c.CartItems) // En CartModel har många CartItems
-			//.WithOne(ci => ci.ShoppingCartEntity)    // En CartItem har en CartModel
-			//.HasForeignKey(ci => ci.); // Anger främmande nyckel
-
-		}
 
 
 		public virtual DbSet<CartItemEntity> CartItems { get; set; }

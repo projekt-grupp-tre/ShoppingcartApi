@@ -37,27 +37,21 @@ namespace Infrastructure.Repositories
 			{
 				if (entity != null)
 				{
-					var exist = GetShoppingCartAsync(entity);
-					return entity;
-				}
-				else
-				{
-					ShoppingCartEntity newEntity = new ShoppingCartEntity();
-					newEntity.UserId = entity.UserId;
-					newEntity.Quantity = entity.Quantity;
+					var exist = await GetShoppingCartFromDbAsync(entity.UserId!);
 
+					if (exist == null) 
+					{
+                        _dataContext.ShoppingCarts.Add(entity);
+                        await _dataContext.SaveChangesAsync();
 
-					_dataContext.ShoppingCarts.Entry(newEntity);
-					_dataContext.SaveChangesAsync();
-					return newEntity;
+						return entity;
+                    }
+
+					return exist!;
 				}
 			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex.Message);
-				throw;
-			}
-
+			catch (Exception ex){ Debug.WriteLine($"CreateShoppingCartAsync - Repository ::: {ex.Message}"); }
+			return null!;
 		}
 
 		public Task<ShoppingCartEntity> DeleteShoppingCartAsync(ShoppingCartEntity entity)

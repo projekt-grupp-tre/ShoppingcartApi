@@ -1,88 +1,55 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Factories;
-using Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
+﻿using Infrastructure.Dtos;
+using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using ShoppingcartApi.Dtos;
-using System.Diagnostics;
 
 namespace ShoppingcartApi.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ShoppingCartController : ControllerBase
-	{
-		private readonly ShoppingCartService _shoppingCartService;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ShoppingCartController : ControllerBase
+    {
+        private readonly IShoppingCartService _shoppingCartService;
+        private readonly ICartItemService _CartItemService;
 
-        public ShoppingCartController(ShoppingCartService shoppingCartService)
+
+        public ShoppingCartController(IShoppingCartService shoppingCartService, ICartItemService cartItemService)
         {
             _shoppingCartService = shoppingCartService;
+            _CartItemService = cartItemService;
         }
 
 
         [HttpPost]
-		public async Task<IActionResult> GetOneProductIntoShoppingCart(ProductDto product)
-		{
-			try
-			{
-				if (ModelState.IsValid)
-				{
-					var existingShoppingCart = _shoppingCartService.GetShoppingcart(product.UserId);
+        public async Task<IActionResult> GetOneProductIntoShoppingCart(ProductDto product)
+        {
+            var existingShoppingCart = await _shoppingCartService.GetShoppingcartAsync(product.UserId);
 
-					if (existingShoppingCart == null)
-						_shoppingCartService.CreateShoppingCart();
+            if (existingShoppingCart == null)
+            {
+                var created = await _shoppingCartService.CreateShoppingCartAsync(product.UserId);
 
+                if (created != null)
+                {
+                    var added = await _CartItemService.AddCartItemToShoppingCartAsync(product, created);
+                    if (added)
+                        return Ok();
+                }
+            }
 
-
-
-
-				}
-
-
-
-
-
+            return Ok();
+        }
+    }
 
 
 
 
+    //[HttpGet]
+    //public IActionResult GetAll()
+    //{
 
-				// DTO FRÅN SERVICEN FRÅN WEBAPP
-
-				// userid
-				// productId
-				// quantity			
-
-				//factory 
+    //	return Ok();
+    //}
 
 
-				// Services				
-
-				// Kontrollera
-
-				//repository
-				// CRUD
-
-
-				return Ok();
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex.Message);
-				throw;
-			}
-		}
-
-
-
-
-		[HttpGet]
-		public IActionResult GetAll()
-		{
-
-			return Ok();
-		}
-
-
-	}
 }
+
