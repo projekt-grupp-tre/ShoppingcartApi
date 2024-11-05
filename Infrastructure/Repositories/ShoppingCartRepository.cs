@@ -1,12 +1,8 @@
 ﻿using Infrastructure.Contexts;
 using Infrastructure.Entities;
 using Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -18,30 +14,21 @@ namespace Infrastructure.Repositories
 			_dataContext = dataContext;
 		}
 
-		public async Task<ShoppingCartEntity> GetShoppingCartAsync(ShoppingCartEntity entity)
+		public async Task<ShoppingCartEntity> GetShoppingCartFromDbAsync(string userId)
 		{
 			try
 			{
-				if (entity != null)
+				if (!string.IsNullOrEmpty(userId))
 				{
-					var shoppingCartExists = await _dataContext.ShoppingCarts.FindAsync(entity.UserId);
+					var shoppingCartExists = await _dataContext.ShoppingCarts.FirstOrDefaultAsync(x => x.UserId == userId);
 					if (shoppingCartExists != null)
 					{
 						return shoppingCartExists;
 					}
 				}
-				else
-					return entity;
-
 			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex.Message);
-
-				throw;
-			}
-
-			return null;
+			catch (Exception ex){ Debug.WriteLine($"GetShoppingCartAsync - Repository ::: {ex.Message}"); }
+			return null!;
 		}
 
 		public async Task<ShoppingCartEntity> CreateShoppingCartAsync(ShoppingCartEntity entity)
