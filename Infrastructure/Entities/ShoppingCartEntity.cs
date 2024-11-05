@@ -6,7 +6,7 @@ namespace Infrastructure.Entities
 	{
 		public int Id { get; set; }
 
-		public string? UserId { get; set; }  //kontrollera med user gänget kring typ?
+		public string UserEmail { get; set; } = null!;  //kontrollera med user gänget kring typ?
 
 		public int Quantity { get; set; } //kvantitet av totala antalet produkter/cartitems i kundvagnen
 

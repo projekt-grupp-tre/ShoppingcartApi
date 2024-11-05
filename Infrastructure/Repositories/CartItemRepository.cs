@@ -30,15 +30,9 @@ namespace Infrastructure.Repositories
         }
 
 
+        public async Task<List<CartItemEntity>> GetCartItemsAsync(int shoppingCartId)
+        {
 
-
-        //public Task<CartItemEntity> CreateCartItemAsync(IProductDto productDto)
-        //{
-        //	var entity = _IProductToCartItemFactory.ConvertFromProductToEntity(productDto);
-
-        //	_dataContext.AddAsync(entity);
-        //	_dataContext.SaveChangesAsync();
-        //	return entity;
-        //}
+        }
     }
 }

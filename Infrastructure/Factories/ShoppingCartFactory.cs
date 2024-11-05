@@ -4,13 +4,13 @@ namespace Infrastructure.Factories
 {
     public static class ShoppingCartFactory
     {
-        public static ShoppingCartEntity CreateShoppingCartEntity(string userId)
+        public static ShoppingCartEntity CreateShoppingCartEntity(string userEmail)
         {
-            if (!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(userEmail))
             {
                 var cart = new ShoppingCartEntity
                 {
-                    UserId = userId
+                    UserEmail = userEmail
                 };
 
                 return cart;

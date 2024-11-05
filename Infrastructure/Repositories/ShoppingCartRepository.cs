@@ -14,13 +14,13 @@ namespace Infrastructure.Repositories
 			_dataContext = dataContext;
 		}
 
-		public async Task<ShoppingCartEntity> GetShoppingCartFromDbAsync(string userId)
+		public async Task<ShoppingCartEntity> GetShoppingCartFromDbAsync(string userEmail)
 		{
 			try
 			{
-				if (!string.IsNullOrEmpty(userId))
+				if (!string.IsNullOrEmpty(userEmail))
 				{
-					var shoppingCartExists = await _dataContext.ShoppingCarts.FirstOrDefaultAsync(x => x.UserId == userId);
+					var shoppingCartExists = await _dataContext.ShoppingCarts.FirstOrDefaultAsync(x => x.UserEmail == userEmail);
 					if (shoppingCartExists != null)
 					{
 						return shoppingCartExists;
@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
 			{
 				if (entity != null)
 				{
-					var exist = await GetShoppingCartFromDbAsync(entity.UserId!);
+					var exist = await GetShoppingCartFromDbAsync(entity.UserEmail!);
 
 					if (exist == null) 
 					{
