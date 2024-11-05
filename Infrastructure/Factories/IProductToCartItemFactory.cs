@@ -1,11 +1,5 @@
-﻿using Infrastructure.Contexts;
-using Infrastructure.Entities;
+﻿using Infrastructure.Entities;
 using Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Factories
 {
@@ -22,9 +16,8 @@ namespace Infrastructure.Factories
 
 			// entity.ShoppingCartId = ? ;
 
-			return new CartItemEntity();
+			return entity;
 
-		}
-		
+		}	
 	}
 }
