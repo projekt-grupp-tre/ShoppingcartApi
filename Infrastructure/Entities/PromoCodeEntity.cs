@@ -8,7 +8,7 @@ namespace Infrastructure.Entities
 		public int Id { get; set; }
 		public string PromoCode { get; set; } = null!;
 
-		//one to many shoppingcarts?
+		//för enklare navigering
 		public virtual ICollection<ShoppingCartEntity>? ShoppingCarts { get; set; } = new HashSet<ShoppingCartEntity>();
 	}
 }

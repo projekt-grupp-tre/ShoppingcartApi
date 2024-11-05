@@ -1,6 +1,10 @@
 
 using Infrastructure.Contexts;
+using Infrastructure.Factories;
+using Infrastructure.Interfaces;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using ShoppingcartApi.Dtos;
 
 namespace ShoppingcartApi
 {
@@ -13,8 +17,11 @@ namespace ShoppingcartApi
 			// Add services to the container.
 
 			builder.Services.AddControllers();
-			builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\r\\Documents\\test.mdf;Integrated Security=True;Connect Timeout=30"));
-			
+			var connectionString = builder.Configuration.GetConnectionString("Database");
+			builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
+			//builder.Services.AddScoped<IProductToCartItemFactory>();
+			builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();

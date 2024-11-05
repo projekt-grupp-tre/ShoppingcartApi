@@ -17,6 +17,7 @@ namespace Infrastructure.Entities
 		public DateTime Created {  get; set; } = DateTime.UtcNow;
 
 
+		
 		[ForeignKey(nameof(ShoppingCartEntity))]
 		public int ShoppingCartId { get; set; }
 		public virtual ShoppingCartEntity ShoppingCartEntity { get; set; } = null!;
