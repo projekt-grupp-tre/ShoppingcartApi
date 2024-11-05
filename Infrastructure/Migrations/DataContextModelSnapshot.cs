@@ -78,7 +78,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PromoCodeId")
+                    b.Property<int?>("PromoCodeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -86,6 +86,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<decimal>("Totalprice")
                         .HasColumnType("Money");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -109,9 +112,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Infrastructure.Entities.PromoCodeEntity", "PromoCode")
                         .WithMany("ShoppingCarts")
-                        .HasForeignKey("PromoCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PromoCodeId");
 
                     b.Navigation("PromoCode");
                 });
