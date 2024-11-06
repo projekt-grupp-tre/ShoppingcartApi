@@ -21,8 +21,12 @@ namespace ShoppingcartApi.Controllers
 
 		[HttpPost]
 		[Route("/add")]
-		public async Task<IActionResult> GetOneProductIntoShoppingCart(ProductDto product)
+		public async Task<IActionResult> GetOneProductIntoShoppingCart([FromBody]ProductDto product)
 		{
+			if(!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 			var existingShoppingCart = await _shoppingCartService.GetShoppingcartAsync(product.UserEmail);
 
 			if (existingShoppingCart == null)
@@ -61,8 +65,13 @@ namespace ShoppingcartApi.Controllers
 
 		[HttpDelete]
 		[Route("/remove-one-item")]
-		public async Task<IActionResult> DeleteOneProductFromShoppingCart(ProductDto product)
+		public async Task<IActionResult> DeleteOneProductFromShoppingCart([FromBody]ProductDto product)
 		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
 			var shoppingCart = await _shoppingCartService.GetFullShoppingCart(product.UserEmail);
 
 			if (shoppingCart != null)
