@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /Infrastructure/Migrations/20241101144624_init.cs
 /ShoppingcartApi/appsettings.json
+/Infrastructure/Migrations/20241105163509_edited column userEntity.cs
+/Infrastructure/Migrations/DataContextModelSnapshot.cs
