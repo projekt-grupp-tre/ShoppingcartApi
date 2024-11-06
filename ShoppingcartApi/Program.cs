@@ -3,6 +3,7 @@ using Infrastructure.Interfaces;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 
 namespace ShoppingcartApi
@@ -27,6 +28,11 @@ namespace ShoppingcartApi
 
             var connectionString = builder.Configuration["Connectionstrings:Database"];
             builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+			//public void ConfigureServices(IServiceCollection services)
+			//{
+			//	services.AddDbContext<YourDbContext>(options =>
+			//		options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+			//}
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
@@ -35,11 +41,10 @@ namespace ShoppingcartApi
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
+			
+			app.UseSwagger();
+			app.UseSwaggerUI();
+			
 
 			app.UseHttpsRedirection();
 
