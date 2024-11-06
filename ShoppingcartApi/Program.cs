@@ -26,13 +26,8 @@ namespace ShoppingcartApi
 			builder.Services.AddScoped<ICartItemService, CartItemService>();
 
 
-            var connectionString = builder.Configuration["Connectionstrings:Database"];
-            builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
-			//public void ConfigureServices(IServiceCollection services)
-			//{
-			//	services.AddDbContext<YourDbContext>(options =>
-			//		options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-			//}
+			var connectionString = builder.Configuration["Connectionstrings:Database"];
+			builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
@@ -41,10 +36,10 @@ namespace ShoppingcartApi
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
-			
+
 			app.UseSwagger();
 			app.UseSwaggerUI();
-			
+
 
 			app.UseHttpsRedirection();
 

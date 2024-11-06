@@ -362,7 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Infrastructure/Migrations/20241101144624_init.cs
-/ShoppingcartApi/appsettings.json
 /Infrastructure/Migrations/20241105163509_edited column userEntity.cs
 /Infrastructure/Migrations/DataContextModelSnapshot.cs
 /Infrastructure/Migrations/20241105163509_edited column userEntity.Designer.cs
