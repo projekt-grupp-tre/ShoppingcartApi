@@ -30,6 +30,29 @@ namespace Infrastructure.Repositories
 			catch (Exception ex){ Debug.WriteLine($"GetShoppingCartAsync - Repository ::: {ex.Message}"); }
 			return null!;
 		}
+		/// <summary>
+		/// Gets the shoppingcart entity with all the navigational properties
+		/// </summary>
+		/// <param name="userEmail"></param>
+		/// <returns>Returns the shoppingcart entity with all the navigational properties</returns>
+		public async Task<ShoppingCartEntity> GetFullShoppingCart(string userEmail)
+		{
+			try
+			{
+				if (!string.IsNullOrEmpty(userEmail))
+				{
+					var shoppingCartExists = await _dataContext.ShoppingCarts.Include(x => x.CartItems).FirstOrDefaultAsync(x => x.UserEmail == userEmail);
+					if (shoppingCartExists != null)
+					{
+						return shoppingCartExists;
+						
+					}
+				}
+			}
+			catch (Exception ex) { Debug.WriteLine($"GetFullShoppingCart - Repository ::: {ex.Message}"); }
+			return null!;
+
+		}
 
 		public async Task<ShoppingCartEntity> CreateShoppingCartAsync(ShoppingCartEntity entity)
 		{
@@ -54,9 +77,18 @@ namespace Infrastructure.Repositories
 			return null!;
 		}
 
-		public Task<ShoppingCartEntity> DeleteShoppingCartAsync(ShoppingCartEntity entity)
+		public async Task<bool> DeleteShoppingCartAsync(ShoppingCartEntity entity)
 		{
-			throw new NotImplementedException();
+			if(entity != null)
+			{
+				
+					_dataContext.ShoppingCarts.Remove(entity);
+					await  _dataContext.SaveChangesAsync();
+					
+				return true;
+				}			
+			
+			return false;
 		}
 
 		public Task<ShoppingCartEntity> UpdateShoppingCartAsync(ShoppingCartEntity entity)

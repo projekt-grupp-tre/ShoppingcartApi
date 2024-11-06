@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241105150149_Init")]
-    partial class Init
+    [Migration("20241105163509_edited column userEntity")]
+    partial class editedcolumnuserEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,7 +90,8 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("Totalprice")
                         .HasColumnType("Money");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

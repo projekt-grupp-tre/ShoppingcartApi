@@ -3,6 +3,7 @@ using Infrastructure.Interfaces;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace ShoppingcartApi
 {
@@ -13,7 +14,11 @@ namespace ShoppingcartApi
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-			builder.Services.AddControllers();
+			builder.Services.AddControllers().AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+			});
+
 			builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
 			builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 			builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();

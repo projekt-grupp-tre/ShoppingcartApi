@@ -1,60 +1,109 @@
 ﻿using Infrastructure.Dtos;
+using Infrastructure.Entities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ShoppingcartApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ShoppingCartController : ControllerBase
-    {
-        private readonly IShoppingCartService _shoppingCartService;
-        private readonly ICartItemService _CartItemService;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class ShoppingCartController : ControllerBase
+	{
+		private readonly IShoppingCartService _shoppingCartService;
+		private readonly ICartItemService _CartItemService;
 
-        public ShoppingCartController(IShoppingCartService shoppingCartService, ICartItemService cartItemService)
-        {
-            _shoppingCartService = shoppingCartService;
-            _CartItemService = cartItemService;
-        }
+		public ShoppingCartController(IShoppingCartService shoppingCartService, ICartItemService cartItemService)
+		{
+			_shoppingCartService = shoppingCartService;
+			_CartItemService = cartItemService;
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> GetOneProductIntoShoppingCart(ProductDto product)
-        {
-            var existingShoppingCart = await _shoppingCartService.GetShoppingcartAsync(product.UserEmail);
+		[HttpPost]
+		public async Task<IActionResult> GetOneProductIntoShoppingCart(ProductDto product)
+		{
+			var existingShoppingCart = await _shoppingCartService.GetShoppingcartAsync(product.UserEmail);
 
-            if (existingShoppingCart == null)
-            {
-                var created = await _shoppingCartService.CreateShoppingCartAsync(product.UserEmail);
+			if (existingShoppingCart == null)
+			{
+				var created = await _shoppingCartService.CreateShoppingCartAsync(product.UserEmail);
 
-                if (created != null)
-                {
-                    var added = await _CartItemService.AddCartItemToShoppingCartAsync(product, created);
-                    if (added)
-                        return Ok();
-                }
-            }
-            else
-            {
+				if (created != null)
+				{
+					var added = await _CartItemService.AddCartItemToShoppingCartAsync(product, created);
+					if (added)
+						return Ok();
+				}
 
+			}
+			else
+			{
+				var cartItemList = await _CartItemService.GetAllCartItemsAsync(product, existingShoppingCart.Id);
 
+				var result = await _CartItemService.CheckExistingCartForItems(cartItemList, product);
+				if (result != null)
+				{
+					return Ok();
 
+				}
+				else
+				{
+					var addedItem = await _CartItemService.AddCartItemToShoppingCartAsync(product, existingShoppingCart);
+					if (addedItem)
+					{
+						return Ok();
+					}
+				}
+			}
+			return BadRequest();
+		}
 
-            }
+		[HttpPost]
+		[Route("RemoveCartItem")]
+		public async Task<IActionResult> DeleteOneProductFromShoppingCart(ProductDto product)
+		{
+			var shoppingCart = await _shoppingCartService.GetFullShoppingCart(product.UserEmail);
 
-            return BadRequest();
-        }
-    }
+			if (shoppingCart != null)
+			{
+				var removed = await _CartItemService.DeleteCartItemFromShoppingCart(shoppingCart.CartItems!.ToList(), product);
 
+				if (removed)
+					return Ok(shoppingCart);
+			}
+			return BadRequest();
+		}
 
+		[HttpPost]
+		[Route("RemoveCart")]
+		public async Task<IActionResult> DeleteShoppingCart(string userEmail)
+		{
+			var shoppingCart = await _shoppingCartService.GetFullShoppingCart(userEmail);
 
+			if (shoppingCart != null)
+			{
+				var removed = await _shoppingCartService.DeleteShoppingCart(shoppingCart);
+				if (removed)
+					return Ok();
+			}
+			return BadRequest();
+		}
 
-    //[HttpGet]
-    //public IActionResult GetAll()
-    //{
+		[HttpGet]
+		public async Task<IActionResult> GetShoppingCart(string userEmail)
+		{
+			if(userEmail != null)
+			{
+				var result = await _shoppingCartService.GetFullShoppingCart(userEmail);
 
-    //	return Ok();
-    //}
+				if(result != null)
+				{
+					return Ok(result);
+				}
+			}
+			return BadRequest();
 
+		}
+	}
 
 }
 
