@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ShoppingcartApi.Controllers
 {
-	[Route("/")]
+	[Route("/cart")]
 	[ApiController]
 	public class ShoppingCartController : ControllerBase
 	{
@@ -19,6 +19,7 @@ namespace ShoppingcartApi.Controllers
 		}
 
 		[HttpPost]
+		[Route("/cart/add")]
 		public async Task<IActionResult> GetOneProductIntoShoppingCart(ProductDto product)
 		{
 			var existingShoppingCart = await _shoppingCartService.GetShoppingcartAsync(product.UserEmail);
@@ -57,8 +58,8 @@ namespace ShoppingcartApi.Controllers
 			return BadRequest();
 		}
 
-		[HttpPost]
-		[Route("RemoveCartItem")]
+		[HttpDelete]
+		[Route("/cart/remove-one-item")]
 		public async Task<IActionResult> DeleteOneProductFromShoppingCart(ProductDto product)
 		{
 			var shoppingCart = await _shoppingCartService.GetFullShoppingCart(product.UserEmail);
@@ -73,8 +74,8 @@ namespace ShoppingcartApi.Controllers
 			return BadRequest();
 		}
 
-		[HttpPost]
-		[Route("RemoveCart")]
+		[HttpDelete]
+		[Route("/cart/delete-cart")]
 		public async Task<IActionResult> DeleteShoppingCart(string userEmail)
 		{
 			var shoppingCart = await _shoppingCartService.GetFullShoppingCart(userEmail);
